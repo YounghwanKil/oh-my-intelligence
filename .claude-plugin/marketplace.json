@@ -1,0 +1,10 @@
+{
+  "name": "oh-my-intelligence",
+  "displayName": "OMI - Oh My Intelligence",
+  "description": "Think/Do multi-model orchestration for Claude Code. Claude thinks (plans, reviews, debugs), Codex does (implements, executes). Auto-routes tasks to the best provider.",
+  "category": "productivity",
+  "tags": ["multi-model", "orchestration", "codex", "think-do", "routing"],
+  "icon": "brain",
+  "requiresPlugins": ["oh-my-claudecode"],
+  "optionalPlugins": ["oh-my-codex"]
+}

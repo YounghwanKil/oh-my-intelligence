@@ -1,0 +1,47 @@
+{
+  "name": "oh-my-intelligence",
+  "version": "1.0.0",
+  "description": "Think/Do multi-model orchestration for Claude Code — combines OMC (Claude) + OMX (Codex) strengths",
+  "type": "module",
+  "main": "src/index.ts",
+  "bin": {
+    "omi": "bridge/cli.cjs"
+  },
+  "files": [
+    "src",
+    "agents",
+    "bridge",
+    "hooks",
+    "scripts",
+    "skills",
+    ".claude-plugin",
+    "CLAUDE.md",
+    "AGENTS.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "check-vendored-types": "bash scripts/check-vendored-types.sh"
+  },
+  "keywords": [
+    "claude-code",
+    "codex",
+    "plugin",
+    "multi-model",
+    "orchestration",
+    "think-do",
+    "routing"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "oh-my-intelligence",
+  "version": "1.0.0",
+  "description": "Think/Do multi-model orchestration — Claude thinks, Codex does, OMI routes",
+  "author": {
+    "name": "gilyoungCoder"
+  },
+  "license": "MIT",
+  "keywords": [
+    "multi-model",
+    "orchestration",
+    "think-do",
+    "codex",
+    "claude"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}
