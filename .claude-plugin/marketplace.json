@@ -1,18 +1,25 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "oh-my-intelligence",
+  "description": "Think/Do multi-model orchestration for Claude Code - Claude thinks, Codex does, OMI routes",
   "owner": {
-    "name": "YounghwanKil",
-    "url": "https://github.com/YounghwanKil"
+    "name": "Younghwan Kil",
+    "email": "yhgil99@kaist.ac.kr"
   },
   "plugins": [
     {
       "name": "oh-my-intelligence",
-      "displayName": "OMI - Oh My Intelligence",
       "description": "Think/Do multi-model orchestration for Claude Code. Claude thinks (plans, reviews, debugs), Codex does (implements, executes). Auto-routes tasks to the best provider.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Younghwan Kil",
+        "email": "yhgil99@kaist.ac.kr"
+      },
+      "source": "./",
       "category": "productivity",
-      "tags": ["multi-model", "orchestration", "codex", "think-do", "routing"],
-      "icon": "brain",
-      "requiresPlugins": ["oh-my-claudecode"],
-      "optionalPlugins": ["oh-my-codex"]
+      "homepage": "https://github.com/YounghwanKil/oh-my-intelligence",
+      "tags": ["multi-model", "orchestration", "codex", "think-do", "routing"]
     }
-  ]
+  ],
+  "version": "1.0.0"
 }
