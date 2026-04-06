@@ -56,9 +56,10 @@ Codex がインストールされていない場合でも、すべて Claude だ
 
 ### 前提条件
 
-- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) がインストール済みであること
-- [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）プラグインがインストール済みであること（必須）
-- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）プラグインがインストール済みであること（任意、Codex 機能用）
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) がインストール済みであること（**必須**）
+- [Codex CLI](https://github.com/openai/codex) がインストール済みであること（**必須** — `npm i -g @openai/codex`）
+- [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）プラグインがインストール済みであること（**必須**）
+- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）プラグインがインストール済みであること（**必須**）
 
 ### インストール
 

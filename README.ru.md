@@ -36,9 +36,10 @@
 
 ### Предварительные требования
 
-- Установлен [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
+- Установлен [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI (**обязательно**)
+- Установлен [Codex CLI](https://github.com/openai/codex) (**обязательно** — `npm i -g @openai/codex`)
 - Установлен плагин [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) (**обязательно**)
-- Установлен [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) (*необязательно* — для функций Codex)
+- Установлен плагин [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) (**обязательно**)
 
 ### Установка
 

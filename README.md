@@ -36,9 +36,10 @@ Claude Code and Codex CLI each have clear strengths. Benchmarks confirm it:
 
 ### Prerequisites
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed (**required**)
+- [Codex CLI](https://github.com/openai/codex) installed (**required** — `npm i -g @openai/codex`)
 - [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) plugin installed (**required**)
-- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) installed (*optional* — for Codex features)
+- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) plugin installed (**required**)
 
 ### Install
 
@@ -254,15 +255,15 @@ Separate from `scientist` (general data analysis). ML tasks → ml-researcher. S
 
 ---
 
-## Claude-Only Mode
+## Fallback Mode
 
-**OMI works without Codex.** When OMX is not installed:
-- All Do tasks automatically fall back to Claude
+While Claude Code and Codex are both required, OMI includes graceful degradation. If Codex becomes temporarily unavailable:
+- Do tasks automatically fall back to Claude
 - Claude receives Do-optimized prompting (FallbackPromptSpec)
-- Every feature works — you just don't get Codex's speed/cost benefits
-- `omi doctor` shows: "Claude fallback active for Do tasks"
+- All features continue to work — you just lose Codex's speed/cost benefits
+- `/route` shows: "Claude fallback active for Do tasks"
 
-This is by design. Codex is an accelerator, never a requirement.
+This ensures OMI never blocks your workflow.
 
 ---
 

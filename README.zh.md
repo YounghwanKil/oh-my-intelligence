@@ -56,9 +56,10 @@ Claude 擅长**规划、代码审查、调试、测试设计和架构**。Codex 
 
 ### 前提条件
 
-- 已安装 [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
-- 已安装 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）插件（必需）
-- 已安装 [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）插件（可选，用于 Codex 功能）
+- 已安装 [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)（**必需**）
+- 已安装 [Codex CLI](https://github.com/openai/codex)（**必需** — `npm i -g @openai/codex`）
+- 已安装 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）插件（**必需**）
+- 已安装 [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）插件（**必需**）
 
 ### 安装
 

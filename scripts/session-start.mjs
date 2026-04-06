@@ -84,6 +84,28 @@ function detectOmx(root) {
   return { installed: true, version, path: omxDir };
 }
 
+import { execSync } from 'child_process';
+
+function detectClaudeCode() {
+  // Check if Claude Code CLI is available
+  try {
+    execSync('which claude 2>/dev/null || where claude 2>nul', { stdio: 'pipe' });
+    return { installed: true };
+  } catch {
+    return { installed: false };
+  }
+}
+
+function detectCodexCli() {
+  // Check if Codex CLI is available
+  try {
+    execSync('which codex 2>/dev/null || where codex 2>nul', { stdio: 'pipe' });
+    return { installed: true };
+  } catch {
+    return { installed: false };
+  }
+}
+
 export default function sessionStart() {
   const root = findProjectRoot();
   const omiState = join(root, '.omi', 'state');
@@ -100,16 +122,41 @@ export default function sessionStart() {
     if (!existsSync(d)) mkdirSync(d, { recursive: true });
   }
 
-  // Detect providers
+  // ── Auth & CLI Detection ───────────────────────────────────────────────────
+  const claudeCli = detectClaudeCode();
+  const codexCli = detectCodexCli();
+
+  const errors = [];
+  if (!claudeCli.installed) {
+    errors.push('Claude Code CLI not found. Install: https://docs.anthropic.com/en/docs/claude-code');
+  }
+  if (!codexCli.installed) {
+    errors.push('Codex CLI not found. Install: npm i -g @openai/codex');
+  }
+
+  // ── Provider Detection ─────────────────────────────────────────────────────
   const omc = detectOmc(root);
   const omx = detectOmx(root);
 
   const providers = [];
   const warnings = [];
 
+  // Claude Code CLI
+  providers.push({
+    name: 'claude-code',
+    status: claudeCli.installed ? 'available' : 'missing',
+  });
+
+  // Codex CLI
+  providers.push({
+    name: 'codex-cli',
+    status: codexCli.installed ? 'available' : 'missing',
+  });
+
+  // OMC (oh-my-claudecode)
   if (omc.installed) {
     providers.push({
-      name: 'claude',
+      name: 'omc',
       status: 'available',
       version: omc.version || 'unknown',
       minVersion: MIN_OMC_VERSION,
@@ -118,13 +165,14 @@ export default function sessionStart() {
       warnings.push(`OMC version ${omc.version} is below minimum ${MIN_OMC_VERSION}. Some features may not work correctly.`);
     }
   } else {
-    providers.push({ name: 'claude', status: 'unavailable' });
-    warnings.push('OMC (oh-my-claudecode) not detected. OMI requires OMC to function.');
+    providers.push({ name: 'omc', status: 'missing' });
+    errors.push('OMC (oh-my-claudecode) not detected. OMI requires OMC to function.');
   }
 
+  // OMX (oh-my-codex)
   if (omx.installed) {
     providers.push({
-      name: 'codex',
+      name: 'omx',
       status: 'available',
       version: omx.version || 'unknown',
       minVersion: MIN_OMX_VERSION,
@@ -133,16 +181,16 @@ export default function sessionStart() {
       warnings.push(`OMX version ${omx.version} is below minimum ${MIN_OMX_VERSION}. Codex features may not work correctly.`);
     }
   } else {
-    providers.push({ name: 'codex', status: 'unavailable' });
-    // Not a warning — OMX is optional
+    providers.push({ name: 'omx', status: 'missing' });
+    warnings.push('OMX (oh-my-codex) not detected. Do Lane will use Claude fallback.');
   }
 
   // Write provider state
   atomicWriteJson(join(omiState, 'providers', 'detected.json'), { providers });
 
-  // Write version warnings if any
-  if (warnings.length > 0) {
-    atomicWriteJson(join(omiState, 'providers', 'version-warning.json'), { warnings });
+  // Write warnings/errors
+  if (warnings.length > 0 || errors.length > 0) {
+    atomicWriteJson(join(omiState, 'providers', 'version-warning.json'), { warnings, errors });
   }
 
   // Read OMC session state if available (ADR-001a: downstream consumer)
@@ -150,7 +198,6 @@ export default function sessionStart() {
   let omcSession = null;
   if (existsSync(omcSessionDir)) {
     try {
-      // Just note that OMC session exists — don't modify it
       omcSession = { detected: true, path: omcSessionDir };
     } catch { /* graceful — OMC state may not be ready yet */ }
   }
@@ -158,18 +205,66 @@ export default function sessionStart() {
   // Write OMI session state
   atomicWriteJson(join(omiState, 'sessions', 'current.json'), {
     startedAt: new Date().toISOString(),
+    claudeCodeInstalled: claudeCli.installed,
+    codexCliInstalled: codexCli.installed,
     omcDetected: omc.installed,
     omxDetected: omx.installed,
     omcSession,
-    codexAvailable: omx.installed,
+    codexAvailable: omx.installed && codexCli.installed,
   });
 
-  // Output for hook system
-  const codexStatus = omx.installed ? '✓' : '(not installed, Claude fallback active)';
-  let output = `[OMI] Providers: Claude ${omc.version || '?'} ✓ | Codex ${omx.version || '?'} ${codexStatus}`;
-  if (warnings.length > 0) {
-    output += `\n[OMI] Warnings: ${warnings.join('; ')}`;
+  // ── Output ─────────────────────────────────────────────────────────────────
+  const lines = [];
+
+  // Header
+  lines.push('');
+  lines.push('  OMI — Oh My Intelligence v1.0.0');
+  lines.push('  ════════════════════════════════');
+
+  // CLI Auth Status
+  const claudeIcon = claudeCli.installed ? '✓' : '✗';
+  const codexIcon = codexCli.installed ? '✓' : '✗';
+  lines.push(`  Claude Code CLI:  ${claudeIcon}`);
+  lines.push(`  Codex CLI:        ${codexIcon}`);
+
+  // Plugin Status
+  const omcIcon = omc.installed ? `✓ v${omc.version || '?'}` : '✗ not found';
+  const omxIcon = omx.installed ? `✓ v${omx.version || '?'}` : '✗ not found';
+  lines.push(`  OMC (Claude):     ${omcIcon}`);
+  lines.push(`  OMX (Codex):      ${omxIcon}`);
+
+  // Routing info
+  const doProvider = (omx.installed && codexCli.installed) ? 'Codex' : 'Claude (fallback)';
+  lines.push('');
+  lines.push(`  Think Lane → Claude`);
+  lines.push(`  Do Lane    → ${doProvider}`);
+
+  // Errors
+  if (errors.length > 0) {
+    lines.push('');
+    lines.push('  ⚠ ERRORS:');
+    for (const e of errors) {
+      lines.push(`    • ${e}`);
+    }
   }
 
-  console.log(output);
+  // Warnings
+  if (warnings.length > 0) {
+    lines.push('');
+    lines.push('  ⚠ Warnings:');
+    for (const w of warnings) {
+      lines.push(`    • ${w}`);
+    }
+  }
+
+  // Usage hint
+  lines.push('');
+  lines.push('  You can now use:');
+  lines.push('  - /think — force Claude (planning, review, debugging)');
+  lines.push('  - /do — force Codex (implementation, quick fixes)');
+  lines.push('  - /route — check current routing status');
+  lines.push('  - Or just describe your task and OMI auto-routes it');
+  lines.push('');
+
+  console.log(lines.join('\n'));
 }

@@ -36,9 +36,10 @@ Claude Code và Codex CLI đều có thế mạnh rõ ràng. Các benchmark xác
 
 ### Điều kiện tiên quyết
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI đã cài đặt
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI đã cài đặt (**bắt buộc**)
+- [Codex CLI](https://github.com/openai/codex) đã cài đặt (**bắt buộc** — `npm i -g @openai/codex`)
 - [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) đã cài đặt (**bắt buộc**)
-- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) đã cài đặt (*tùy chọn* — cho các tính năng Codex)
+- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) đã cài đặt (**bắt buộc**)
 
 ### Cài đặt
 

@@ -56,9 +56,10 @@ Tarefas de implementação, execução e modificação de arquivos.
 
 ### Pré-requisitos
 
-- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) instalado
-- Plugin [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) instalado (obrigatório)
-- Plugin [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) instalado (opcional, para funcionalidades do Codex)
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) instalado (**obrigatório**)
+- [Codex CLI](https://github.com/openai/codex) instalado (**obrigatório** — `npm i -g @openai/codex`)
+- Plugin [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) instalado (**obrigatório**)
+- Plugin [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) instalado (**obrigatório**)
 
 ### Instalação
 

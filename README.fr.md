@@ -36,9 +36,10 @@ Claude Code et Codex CLI ont chacun des forces évidentes. Les benchmarks le con
 
 ### Prérequis
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installé
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installé (**requis**)
+- [Codex CLI](https://github.com/openai/codex) installé (**requis** — `npm i -g @openai/codex`)
 - [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) plugin installé (**requis**)
-- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) installé (*optionnel* — pour les fonctionnalités Codex)
+- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) plugin installé (**requis**)
 
 ### Installation
 
