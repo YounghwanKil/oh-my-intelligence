@@ -60,20 +60,41 @@ Claude 擅长**规划、代码审查、调试、测试设计和架构**。Codex 
 - 已安装 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）插件（必需）
 - 已安装 [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）插件（可选，用于 Codex 功能）
 
-### 从 Claude Code 市场安装（推荐）
+### 安装
 
-```bash
-claude plugin install oh-my-intelligence
-```
+选择以下两种方式之一。
 
-### 从 npm 安装
+#### 方式 A：npm（推荐）
 
 ```bash
 npm i -g oh-my-intelligence
-omi setup
 ```
 
-### 从源码安装
+然后在 Claude Code 中：
+
+```
+/setup
+```
+
+检测 OMC/OMX，初始化 `.omi/` 状态，配置 Hook。
+
+#### 方式 B：Claude Code 市场
+
+在 Claude Code 中：
+
+```
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
+/plugin install oh-my-intelligence
+/reload-plugins
+```
+
+重新加载后，运行设置：
+
+```
+/setup
+```
+
+#### 从源码安装
 
 ```bash
 git clone https://github.com/YounghwanKil/oh-my-intelligence.git
@@ -82,16 +103,27 @@ npm install
 npm run build
 ```
 
-### 验证安装
+### 验证
 
-```bash
-omi doctor
-```
-
-或者在 Claude Code 中运行：
+在 Claude Code 中运行：
 
 ```
 /route
+```
+
+显示当前路由状态、检测到的提供者和活跃通道。
+
+### 更新
+
+**npm：**
+```bash
+npm i -g oh-my-intelligence@latest
+```
+
+**市场：**
+```
+/plugin marketplace update oh-my-intelligence
+/reload-plugins
 ```
 
 ## 快速开始

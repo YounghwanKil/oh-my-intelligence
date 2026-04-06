@@ -60,20 +60,41 @@ Codex がインストールされていない場合でも、すべて Claude だ
 - [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）プラグインがインストール済みであること（必須）
 - [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）プラグインがインストール済みであること（任意、Codex 機能用）
 
-### Claude Code マーケットプレイスからインストール（推奨）
+### インストール
 
-```bash
-claude plugin install oh-my-intelligence
-```
+以下の2つの方法のいずれかを選択してください。
 
-### npm からインストール
+#### 方法 A：npm（推奨）
 
 ```bash
 npm i -g oh-my-intelligence
-omi setup
 ```
 
-### ソースからインストール
+その後、Claude Code 内で：
+
+```
+/setup
+```
+
+OMC/OMX を検出し、`.omi/` の状態を初期化し、Hook を設定します。
+
+#### 方法 B：Claude Code マーケットプレイス
+
+Claude Code 内で：
+
+```
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
+/plugin install oh-my-intelligence
+/reload-plugins
+```
+
+リロード後、セットアップを実行：
+
+```
+/setup
+```
+
+#### ソースからインストール
 
 ```bash
 git clone https://github.com/YounghwanKil/oh-my-intelligence.git
@@ -82,16 +103,27 @@ npm install
 npm run build
 ```
 
-### インストールの確認
+### 確認
 
-```bash
-omi doctor
-```
-
-または Claude Code 内から：
+Claude Code 内で：
 
 ```
 /route
+```
+
+現在のルーティング状態、検出されたプロバイダ、アクティブなレーンを表示します。
+
+### アップデート
+
+**npm：**
+```bash
+npm i -g oh-my-intelligence@latest
+```
+
+**マーケットプレイス：**
+```
+/plugin marketplace update oh-my-intelligence
+/reload-plugins
 ```
 
 ## クイックスタート

@@ -36,30 +36,45 @@
 
 ### Предварительные требования
 
-- Установлен [Claude Code](https://claude.ai/code)
-- Установлен плагин [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (**обязательно**)
-- Установлен [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (*необязательно* — для функций Codex)
+- Установлен [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
+- Установлен плагин [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) (**обязательно**)
+- Установлен [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) (*необязательно* — для функций Codex)
 
-### Шаг 1: Установка
+### Установка
 
-**Claude Code Marketplace (рекомендуется):**
-```bash
-/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
-/plugin install oh-my-intelligence
-```
+Выберите один из двух способов ниже.
 
-**npm:**
+#### Вариант A: npm (рекомендуется)
+
 ```bash
 npm i -g oh-my-intelligence
 ```
 
-### Шаг 2: Настройка
+Затем в Claude Code:
 
-```bash
-omi setup
+```
+/setup
 ```
 
-### Шаг 3: Создайте что-нибудь
+Обнаруживает OMC/OMX, инициализирует состояние `.omi/` и настраивает хуки.
+
+#### Вариант B: Claude Code Marketplace
+
+В Claude Code:
+
+```
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
+/plugin install oh-my-intelligence
+/reload-plugins
+```
+
+После перезагрузки запустите настройку:
+
+```
+/setup
+```
+
+### Создайте что-нибудь
 
 ```
 autopilot: build a REST API with authentication
@@ -69,19 +84,25 @@ OMI автоматически маршрутизирует: Claude планир
 
 ### Проверка
 
+В Claude Code:
+
+```
+/route
+```
+
+Показывает текущее состояние маршрутизации, обнаруженных провайдеров и активные полосы.
+
+### Обновление
+
+**npm:**
 ```bash
-omi doctor
+npm i -g oh-my-intelligence@latest
 ```
 
+**Marketplace:**
 ```
-OMI Doctor
-==========
-  OMC (oh-my-claudecode): ✓ v4.10.2
-  OMX (oh-my-codex):      ✓ v0.11.13  (or: not installed — Claude fallback active)
-  .omi/ state:             ✓ initialized
-  Node.js:                 ✓ v22.x
-
-RESULT: ✓ All systems operational.
+/plugin marketplace update oh-my-intelligence
+/reload-plugins
 ```
 
 ---
@@ -166,7 +187,9 @@ RESULT: ✓ All systems operational.
 
 Все существующие навыки OMC (`/oh-my-claudecode:*`) продолжают работать без изменений.
 
-### CLI
+### CLI (только при установке через npm)
+
+Если вы установили через npm (`npm i -g oh-my-intelligence`), также доступны эти команды терминала:
 
 ```bash
 omi setup     # Обнаружить OMC/OMX, инициализировать .omi/
@@ -174,6 +197,8 @@ omi doctor    # Проверить зависимости и состояние
 omi route     # Показать провайдеров и состояние маршрутизации
 omi version   # Показать версию
 ```
+
+> **Примечание:** При установке через Marketplace используйте `/setup` и `/route` в Claude Code.
 
 ---
 

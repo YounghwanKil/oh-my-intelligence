@@ -36,30 +36,45 @@ Claude Code và Codex CLI đều có thế mạnh rõ ràng. Các benchmark xác
 
 ### Điều kiện tiên quyết
 
-- [Claude Code](https://claude.ai/code) đã cài đặt
-- Plugin [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) đã cài đặt (**bắt buộc**)
-- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) đã cài đặt (*tùy chọn* — cho các tính năng Codex)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI đã cài đặt
+- [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) đã cài đặt (**bắt buộc**)
+- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) đã cài đặt (*tùy chọn* — cho các tính năng Codex)
 
-### Bước 1: Cài đặt
+### Cài đặt
 
-**Claude Code Marketplace (khuyến nghị):**
-```bash
-/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
-/plugin install oh-my-intelligence
-```
+Chọn một trong hai phương pháp dưới đây.
 
-**npm:**
+#### Cách A: npm (khuyến nghị)
+
 ```bash
 npm i -g oh-my-intelligence
 ```
 
-### Bước 2: Thiết lập
+Sau đó trong Claude Code:
 
-```bash
-omi setup
+```
+/setup
 ```
 
-### Bước 3: Xây dựng thứ gì đó
+Phát hiện OMC/OMX, khởi tạo trạng thái `.omi/` và cấu hình hook.
+
+#### Cách B: Claude Code Marketplace
+
+Trong Claude Code:
+
+```
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
+/plugin install oh-my-intelligence
+/reload-plugins
+```
+
+Sau khi tải lại, chạy thiết lập:
+
+```
+/setup
+```
+
+### Xây dựng thứ gì đó
 
 ```
 autopilot: build a REST API with authentication
@@ -69,19 +84,25 @@ OMI tự động định tuyến: Claude lên kế hoạch kiến trúc → Code
 
 ### Xác minh
 
+Trong Claude Code:
+
+```
+/route
+```
+
+Hiển thị trạng thái định tuyến hiện tại, nhà cung cấp được phát hiện và các làn đang hoạt động.
+
+### Cập nhật
+
+**npm:**
 ```bash
-omi doctor
+npm i -g oh-my-intelligence@latest
 ```
 
+**Marketplace:**
 ```
-OMI Doctor
-==========
-  OMC (oh-my-claudecode): ✓ v4.10.2
-  OMX (oh-my-codex):      ✓ v0.11.13  (or: not installed — Claude fallback active)
-  .omi/ state:             ✓ initialized
-  Node.js:                 ✓ v22.x
-
-RESULT: ✓ All systems operational.
+/plugin marketplace update oh-my-intelligence
+/reload-plugins
 ```
 
 ---
@@ -166,7 +187,9 @@ Các luồng công việc tổng hợp tự động chuyển đổi theo từng 
 
 Tất cả các skill OMC hiện có (`/oh-my-claudecode:*`) vẫn hoạt động không thay đổi.
 
-### CLI
+### CLI (chỉ khi cài qua npm)
+
+Nếu bạn cài đặt qua npm (`npm i -g oh-my-intelligence`), các lệnh terminal sau cũng khả dụng:
 
 ```bash
 omi setup     # Phát hiện OMC/OMX, khởi tạo .omi/
@@ -174,6 +197,8 @@ omi doctor    # Kiểm tra phụ thuộc và trạng thái
 omi route     # Hiển thị nhà cung cấp và trạng thái định tuyến
 omi version   # Hiển thị phiên bản
 ```
+
+> **Lưu ý:** Cài đặt qua Marketplace sử dụng `/setup` và `/route` trong Claude Code.
 
 ---
 

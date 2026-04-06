@@ -60,20 +60,41 @@ Tareas de implementación, ejecución y modificación de archivos.
 - Plugin [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) instalado (requerido)
 - Plugin [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) instalado (opcional, para funciones de Codex)
 
-### Desde el Marketplace de Claude Code (Recomendado)
+### Instalación
 
-```bash
-claude plugin install oh-my-intelligence
-```
+Elija uno de los dos métodos a continuación.
 
-### Desde npm
+#### Opción A: npm (recomendado)
 
 ```bash
 npm i -g oh-my-intelligence
-omi setup
 ```
 
-### Desde el Código Fuente
+Luego dentro de Claude Code:
+
+```
+/setup
+```
+
+Detecta OMC/OMX, inicializa el estado `.omi/` y configura los hooks.
+
+#### Opción B: Claude Code Marketplace
+
+Dentro de Claude Code:
+
+```
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
+/plugin install oh-my-intelligence
+/reload-plugins
+```
+
+Después de recargar, ejecute la configuración:
+
+```
+/setup
+```
+
+#### Desde el Código Fuente
 
 ```bash
 git clone https://github.com/YounghwanKil/oh-my-intelligence.git
@@ -82,16 +103,27 @@ npm install
 npm run build
 ```
 
-### Verificar la Instalación
+### Verificación
 
-```bash
-omi doctor
-```
-
-O desde dentro de Claude Code:
+Dentro de Claude Code:
 
 ```
 /route
+```
+
+Muestra el estado actual del enrutamiento, proveedores detectados y carriles activos.
+
+### Actualización
+
+**npm:**
+```bash
+npm i -g oh-my-intelligence@latest
+```
+
+**Marketplace:**
+```
+/plugin marketplace update oh-my-intelligence
+/reload-plugins
 ```
 
 ## Inicio Rápido
