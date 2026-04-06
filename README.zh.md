@@ -15,7 +15,7 @@ Claude 思考。Codex 执行。OMI 路由。
 
 ## 什么是 OMI？
 
-OMI 将 [oh-my-claudecode](https://github.com/nicobailon/oh-my-claudecode)（OMC）和 [oh-my-codex](https://github.com/nicobailon/oh-my-codex)（OMX）的优势整合为统一的编排层。
+OMI 将 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）和 [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）的优势整合为统一的编排层。
 
 Claude 擅长**规划、代码审查、调试、测试设计和架构**。Codex 擅长**快速代码生成、高性价比实现和 DevOps**。OMI 根据任务类型自动将每个任务路由到最佳提供者，让你无需手动切换就能获得最合适的工具。
 
@@ -57,8 +57,8 @@ Claude 擅长**规划、代码审查、调试、测试设计和架构**。Codex 
 ### 前提条件
 
 - 已安装 [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
-- 已安装 [oh-my-claudecode](https://github.com/nicobailon/oh-my-claudecode)（OMC）插件（必需）
-- 已安装 [oh-my-codex](https://github.com/nicobailon/oh-my-codex)（OMX）插件（可选，用于 Codex 功能）
+- 已安装 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）插件（必需）
+- 已安装 [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）插件（可选，用于 Codex 功能）
 
 ### 从 Claude Code 市场安装（推荐）
 
@@ -76,7 +76,7 @@ omi setup
 ### 从源码安装
 
 ```bash
-git clone https://github.com/nicobailon/oh-my-intelligence.git
+git clone https://github.com/YounghwanKil/oh-my-intelligence.git
 cd oh-my-intelligence
 npm install
 npm run build

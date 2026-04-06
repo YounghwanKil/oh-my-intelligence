@@ -15,7 +15,7 @@ Claudeが考える。Codexが実行する。OMIがルーティングする。
 
 ## OMI とは？
 
-OMI は [oh-my-claudecode](https://github.com/nicobailon/oh-my-claudecode)（OMC）と [oh-my-codex](https://github.com/nicobailon/oh-my-codex)（OMX）の長所を統合した単一のオーケストレーション層です。
+OMI は [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）と [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）の長所を統合した単一のオーケストレーション層です。
 
 Claude は**設計、コードレビュー、デバッグ、テスト設計、アーキテクチャ**に優れています。Codex は**高速なコード生成、コスト効率の良い実装、DevOps**に優れています。OMI はタスクの種類に基づいて各タスクを最適なプロバイダに自動ルーティングするため、手動で切り替えることなく適切なツールを利用できます。
 
@@ -57,8 +57,8 @@ Codex がインストールされていない場合でも、すべて Claude だ
 ### 前提条件
 
 - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) がインストール済みであること
-- [oh-my-claudecode](https://github.com/nicobailon/oh-my-claudecode)（OMC）プラグインがインストール済みであること（必須）
-- [oh-my-codex](https://github.com/nicobailon/oh-my-codex)（OMX）プラグインがインストール済みであること（任意、Codex 機能用）
+- [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)（OMC）プラグインがインストール済みであること（必須）
+- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)（OMX）プラグインがインストール済みであること（任意、Codex 機能用）
 
 ### Claude Code マーケットプレイスからインストール（推奨）
 
@@ -76,7 +76,7 @@ omi setup
 ### ソースからインストール
 
 ```bash
-git clone https://github.com/nicobailon/oh-my-intelligence.git
+git clone https://github.com/YounghwanKil/oh-my-intelligence.git
 cd oh-my-intelligence
 npm install
 npm run build

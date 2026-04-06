@@ -44,7 +44,7 @@ Claude Code and Codex CLI each have clear strengths. Benchmarks confirm it:
 
 **Claude Code Marketplace (recommended):**
 ```bash
-/plugin marketplace add https://github.com/gilyoungCoder/oh-my-intelligence
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
 /plugin install oh-my-intelligence
 ```
 
@@ -91,20 +91,20 @@ RESULT: ✓ All systems operational.
 Every task flows through one of two lanes:
 
 ```
-                    ┌─────────────────────────┐
+                    ┌──────────────────────────┐
                     │      Your Request        │
-                    └────────────┬────────────┘
+                    └────────────┬─────────────┘
                                  │
-                          ┌──────▼──────┐
+                          ┌──────▼───────┐
                           │ Intent Router│
                           │ (auto-route) │
-                          └──┬───────┬──┘
+                          └──┬───────┬───┘
                              │       │
-                    ┌────────▼─┐   ┌─▼────────┐
+                    ┌────────▼─┐   ┌─▼─────────┐
                     │  THINK   │   │    DO     │
                     │  Lane    │   │   Lane    │
                     │ (Claude) │   │  (Codex)  │
-                    └──────────┘   └──────────┘
+                    └──────────┘   └───────────┘
 ```
 
 ### Think Lane (Claude-preferred)
@@ -306,7 +306,7 @@ OMI doesn't replace OMC or OMX. It sits on top and makes them work together.
 ## Development
 
 ```bash
-git clone https://github.com/gilyoungCoder/oh-my-intelligence
+git clone https://github.com/YounghwanKil/oh-my-intelligence
 cd oh-my-intelligence
 npm install
 npm run build

@@ -44,7 +44,7 @@ Claude Code et Codex CLI ont chacun des forces évidentes. Les benchmarks le con
 
 **Claude Code Marketplace (recommandé) :**
 ```bash
-/plugin marketplace add https://github.com/gilyoungCoder/oh-my-intelligence
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
 /plugin install oh-my-intelligence
 ```
 
@@ -91,20 +91,20 @@ RESULT: ✓ All systems operational.
 Chaque tâche passe par l'une des deux voies :
 
 ```
-                    ┌─────────────────────────┐
+                    ┌──────────────────────────┐
                     │      Your Request        │
-                    └────────────┬────────────┘
+                    └────────────┬─────────────┘
                                  │
-                          ┌──────▼──────┐
-                          │ Intent Router│
-                          │ (auto-route) │
-                          └──┬───────┬──┘
+                          ┌──────▼───────┐
+                          │ Intent Router │
+                          │ (auto-route)  │
+                          └──┬───────┬───┘
                              │       │
-                    ┌────────▼─┐   ┌─▼────────┐
-                    │  THINK   │   │    DO     │
-                    │  Lane    │   │   Lane    │
-                    │ (Claude) │   │  (Codex)  │
-                    └──────────┘   └──────────┘
+                    ┌────────▼──┐  ┌─▼──────────┐
+                    │  THINK    │  │    DO       │
+                    │  Lane     │  │   Lane      │
+                    │ (Claude)  │  │  (Codex)    │
+                    └───────────┘  └────────────┘
 ```
 
 ### Think Lane (Claude de préférence)
@@ -306,7 +306,7 @@ OMI ne remplace ni OMC ni OMX. Il se place au-dessus et les fait travailler ense
 ## Développement
 
 ```bash
-git clone https://github.com/gilyoungCoder/oh-my-intelligence
+git clone https://github.com/YounghwanKil/oh-my-intelligence
 cd oh-my-intelligence
 npm install
 npm run build

@@ -15,7 +15,7 @@ Claude piensa. Codex ejecuta. OMI enruta.
 
 ## ¿Qué es OMI?
 
-OMI combina las fortalezas de [oh-my-claudecode](https://github.com/nicobailon/oh-my-claudecode) (OMC) y [oh-my-codex](https://github.com/nicobailon/oh-my-codex) (OMX) en una única capa de orquestación.
+OMI combina las fortalezas de [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) y [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) en una única capa de orquestación.
 
 Claude sobresale en **planificación, revisión de código, depuración, diseño de pruebas y arquitectura**. Codex sobresale en **generación rápida de código, implementación eficiente en costos y DevOps**. OMI enruta automáticamente cada tarea al mejor proveedor según el tipo de tarea, para que obtengas la herramienta adecuada para el trabajo adecuado sin cambios manuales.
 
@@ -57,8 +57,8 @@ Tareas de implementación, ejecución y modificación de archivos.
 ### Requisitos Previos
 
 - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) instalado
-- Plugin [oh-my-claudecode](https://github.com/nicobailon/oh-my-claudecode) (OMC) instalado (requerido)
-- Plugin [oh-my-codex](https://github.com/nicobailon/oh-my-codex) (OMX) instalado (opcional, para funciones de Codex)
+- Plugin [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) (OMC) instalado (requerido)
+- Plugin [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) (OMX) instalado (opcional, para funciones de Codex)
 
 ### Desde el Marketplace de Claude Code (Recomendado)
 
@@ -76,7 +76,7 @@ omi setup
 ### Desde el Código Fuente
 
 ```bash
-git clone https://github.com/nicobailon/oh-my-intelligence.git
+git clone https://github.com/YounghwanKil/oh-my-intelligence.git
 cd oh-my-intelligence
 npm install
 npm run build

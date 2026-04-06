@@ -44,7 +44,7 @@ Claude Code và Codex CLI đều có thế mạnh rõ ràng. Các benchmark xác
 
 **Claude Code Marketplace (khuyến nghị):**
 ```bash
-/plugin marketplace add https://github.com/gilyoungCoder/oh-my-intelligence
+/plugin marketplace add https://github.com/YounghwanKil/oh-my-intelligence
 /plugin install oh-my-intelligence
 ```
 
@@ -91,20 +91,20 @@ RESULT: ✓ All systems operational.
 Mọi tác vụ đều đi qua một trong hai làn:
 
 ```
-                    ┌─────────────────────────┐
+                    ┌──────────────────────────┐
                     │      Your Request        │
-                    └────────────┬────────────┘
+                    └────────────┬─────────────┘
                                  │
-                          ┌──────▼──────┐
-                          │ Intent Router│
-                          │ (auto-route) │
-                          └──┬───────┬──┘
+                          ┌──────▼───────┐
+                          │ Intent Router │
+                          │ (auto-route)  │
+                          └──┬───────┬───┘
                              │       │
-                    ┌────────▼─┐   ┌─▼────────┐
-                    │  THINK   │   │    DO     │
-                    │  Lane    │   │   Lane    │
-                    │ (Claude) │   │  (Codex)  │
-                    └──────────┘   └──────────┘
+                    ┌────────▼──┐  ┌─▼──────────┐
+                    │  THINK    │  │    DO       │
+                    │  Lane     │  │   Lane      │
+                    │ (Claude)  │  │  (Codex)    │
+                    └───────────┘  └────────────┘
 ```
 
 ### Think Lane (ưu tiên Claude)
@@ -306,7 +306,7 @@ OMI không thay thế OMC hay OMX. Nó nằm trên cùng và làm cho chúng ph�
 ## Phát triển
 
 ```bash
-git clone https://github.com/gilyoungCoder/oh-my-intelligence
+git clone https://github.com/YounghwanKil/oh-my-intelligence
 cd oh-my-intelligence
 npm install
 npm run build
