@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const VERSION = '1.0.1';
+const VERSION = '1.0.2';
 
 const OMC_NPM_PACKAGE = 'oh-my-claude-sisyphus';
 const OMX_NPM_PACKAGE = 'oh-my-codex';

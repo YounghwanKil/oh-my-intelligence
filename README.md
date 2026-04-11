@@ -43,32 +43,27 @@ Claude Code and Codex CLI each have clear strengths. Benchmarks confirm it:
 
 ### Install
 
-Choose one of the two methods below.
-
-#### Option A: install from source (recommended for now)
+#### Option A: npm (recommended)
 
 ```bash
-git clone https://github.com/YounghwanKil/oh-my-intelligence.git
-cd oh-my-intelligence
-npm i -g .
+npm i -g oh-my-intelligence@latest
 ```
 
-Then initialize OMI once in your project root:
+Then initialize OMI in your project root. A single line also installs OMC and OMX for you:
 
 ```bash
-omi setup                    # detect providers only
-omi setup --install-deps     # auto-install OMC + OMX if missing, then setup
+omi setup --install-deps     # auto-install OMC + OMX, then run their setup
+# or, detection only:
+omi setup
 ```
 
-`--install-deps` runs `npm i -g oh-my-claude-sisyphus oh-my-codex` and their respective `setup` commands for you. Omit the flag to keep the default safe behavior (detection only).
+`--install-deps` runs `npm i -g oh-my-claude-sisyphus oh-my-codex` and their respective `setup` commands. Omit the flag to keep the default safe behavior (detection only).
 
 > **Caveats for `--install-deps`**
-> - The global `npm i -g` step needs write access to your npm prefix. If it fails with `EACCES`, either re-run with `sudo`, or configure a user-writable prefix (`npm config set prefix ~/.npm-global`).
+> - The global `npm i -g` step needs write access to your npm prefix. If it fails with `EACCES`, either re-run with `sudo`, or configure a user-writable prefix (`npm config set prefix ~/.npm-global` and ensure `$(npm config get prefix)/bin` is on your `PATH`).
 > - The follow-up `omc setup` / `omx setup` commands expect to run inside a Claude Code project. OMI still completes its own initialization even if a plugin's `setup` fails, so you can always rerun those manually later.
 
-After that, open Claude Code in the same project. OMI will keep `.omi/` state updated automatically via its hooks.
-
-Inside Claude Code you can verify routing with:
+After that, open Claude Code in the same project. OMI keeps `.omi/` state updated automatically via its hooks. Inside Claude Code, verify routing with:
 
 ```
 /route
@@ -84,7 +79,18 @@ Inside Claude Code:
 /reload-plugins
 ```
 
-After reload, start or restart the Claude Code session in your project. OMI will auto-detect OMC/OMX and initialize `.omi/` on session start. Use `/route` to confirm the detected providers and active lane.
+After reload, start or restart the Claude Code session in your project. OMI auto-detects OMC/OMX and initializes `.omi/` on session start. Use `/route` to confirm.
+
+#### Option C: install from source
+
+For contributors or when you want the bleeding edge:
+
+```bash
+git clone https://github.com/YounghwanKil/oh-my-intelligence.git
+cd oh-my-intelligence
+npm i -g .
+omi setup --install-deps
+```
 
 ### Build something
 
