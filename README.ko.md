@@ -56,8 +56,11 @@ npm i -g .
 그런 다음 프로젝트 루트에서 한 번 초기화하세요:
 
 ```bash
-omi setup
+omi setup                    # 프로바이더 감지만 수행
+omi setup --install-deps     # OMC + OMX 자동 설치 후 setup까지 실행
 ```
+
+`--install-deps`는 `npm i -g oh-my-claude-sisyphus oh-my-codex`와 각 플러그인의 `setup`을 자동으로 돌려줍니다. 안전하게 감지만 하려면 플래그를 빼고 실행하세요.
 
 그 후 같은 프로젝트를 Claude Code로 열면 OMI가 훅을 통해 `.omi/` 상태를 계속 갱신합니다.
 

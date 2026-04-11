@@ -56,8 +56,11 @@ npm i -g .
 Then initialize OMI once in your project root:
 
 ```bash
-omi setup
+omi setup                    # detect providers only
+omi setup --install-deps     # auto-install OMC + OMX if missing, then setup
 ```
+
+`--install-deps` runs `npm i -g oh-my-claude-sisyphus oh-my-codex` and their respective `setup` commands for you. Omit the flag to keep the default safe behavior (detection only).
 
 After that, open Claude Code in the same project. OMI will keep `.omi/` state updated automatically via its hooks.
 

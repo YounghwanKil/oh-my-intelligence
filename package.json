@@ -1,6 +1,6 @@
 {
   "name": "oh-my-intelligence",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Think/Do multi-model orchestration for Claude Code — combines OMC (Claude) + OMX (Codex) strengths",
   "type": "module",
   "main": "dist/index.js",

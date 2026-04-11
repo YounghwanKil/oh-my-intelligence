@@ -3,8 +3,12 @@
 
 const fs = require('fs');
 const path = require('path');
+const { spawnSync } = require('child_process');
 
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
+
+const OMC_NPM_PACKAGE = 'oh-my-claude-sisyphus';
+const OMX_NPM_PACKAGE = 'oh-my-codex';
 
 // ---------------------------------------------------------------------------
 // ANSI colors
@@ -104,6 +108,44 @@ function writeWarningsState(omiBase, warnings, errors) {
 }
 
 // ---------------------------------------------------------------------------
+// Dependency installer
+// ---------------------------------------------------------------------------
+
+function commandExists(cmd) {
+  const checker = process.platform === 'win32' ? 'where' : 'which';
+  const result = spawnSync(checker, [cmd], { stdio: 'ignore' });
+  return result.status === 0;
+}
+
+function runStep(cmd, args, opts) {
+  const result = spawnSync(cmd, args, { stdio: 'inherit', ...opts });
+  return result.status === 0;
+}
+
+function installPlugin(npmPackage, displayName) {
+  console.log('  ' + c.dim + '$ npm i -g ' + npmPackage + c.reset);
+  const ok = runStep('npm', ['i', '-g', npmPackage]);
+  if (!ok) {
+    console.log('  ' + icon(false) + ' Failed to install ' + displayName + '.');
+    console.log('  ' + c.dim + 'Retry manually: sudo npm i -g ' + npmPackage + c.reset);
+  }
+  return ok;
+}
+
+function runPluginSetup(binName, displayName, cwd) {
+  if (!commandExists(binName)) {
+    console.log('  ' + icon(false) + ' `' + binName + '` not on PATH after install. Check npm global prefix.');
+    return false;
+  }
+  console.log('  ' + c.dim + '$ ' + binName + ' setup' + c.reset);
+  const ok = runStep(binName, ['setup'], { cwd });
+  if (!ok) {
+    console.log('  ' + icon(false) + ' ' + displayName + ' setup exited non-zero.');
+  }
+  return ok;
+}
+
+// ---------------------------------------------------------------------------
 // Provider detection
 // ---------------------------------------------------------------------------
 
@@ -188,6 +230,7 @@ function cmdHelp() {
     '',
     '  ' + c.bold + 'Commands:' + c.reset,
     '    ' + c.green + 'setup' + c.reset + '     Detect providers and initialize .omi/ directory',
+    '              ' + c.dim + '--install-deps  auto-install OMC and OMX if missing' + c.reset,
     '    ' + c.green + 'doctor' + c.reset + '    Check all dependencies and report status',
     '    ' + c.green + 'route' + c.reset + '     Show current routing status',
     '    ' + c.green + 'version' + c.reset + '   Show OMI version',
@@ -201,7 +244,8 @@ function cmdHelp() {
   ].join('\n'));
 }
 
-function cmdSetup() {
+function cmdSetup(opts) {
+  const installDeps = !!(opts && opts.installDeps);
   const root = findProjectRoot();
   const MIN_OMC_VERSION = '4.10.0';
   const MIN_OMX_VERSION = '0.11.0';
@@ -209,16 +253,42 @@ function cmdSetup() {
   console.log('  ' + c.dim + '─────────' + c.reset + '\n');
 
   // Detect providers
-  const omc = detectOmc(root);
-  const omx = detectOmx(root);
+  let omc = detectOmc(root);
+  let omx = detectOmx(root);
 
   console.log('  ' + c.bold + 'Provider detection:' + c.reset);
   console.log('  OMC ' + c.dim + '(oh-my-claudecode)' + c.reset + ': ' + (omc.installed ? icon(true) + ' installed' + (omc.version ? c.dim + ' v' + omc.version + c.reset : '') : icon(false) + ' not found'));
   console.log('  OMX ' + c.dim + '(oh-my-codex)' + c.reset + ':      ' + (omx.installed ? icon(true) + ' installed' + (omx.version ? c.dim + ' v' + omx.version + c.reset : '') : c.dim + '- not found (optional)' + c.reset));
 
+  if (installDeps && (!omc.installed || !omx.installed)) {
+    console.log('\n  ' + c.bold + 'Installing missing plugins:' + c.reset);
+    if (!omc.installed) {
+      console.log('  OMC ' + c.dim + '(' + OMC_NPM_PACKAGE + ')' + c.reset);
+      if (installPlugin(OMC_NPM_PACKAGE, 'OMC')) {
+        runPluginSetup('omc', 'OMC', root);
+      }
+    }
+    if (!omx.installed) {
+      console.log('  OMX ' + c.dim + '(' + OMX_NPM_PACKAGE + ')' + c.reset);
+      if (installPlugin(OMX_NPM_PACKAGE, 'OMX')) {
+        runPluginSetup('omx', 'OMX', root);
+      }
+    }
+    omc = detectOmc(root);
+    omx = detectOmx(root);
+    console.log('');
+  }
+
   if (!omc.installed) {
     console.log('\n  WARNING: OMC is required for OMI to function.');
-    console.log('  Install it with: claude plugin install oh-my-claudecode');
+    if (installDeps) {
+      console.log('  Auto-install failed. Try: sudo npm i -g ' + OMC_NPM_PACKAGE + ' && omc setup');
+    } else {
+      console.log('  Install it with: npm i -g ' + OMC_NPM_PACKAGE + ' && omc setup');
+      console.log('  Or re-run:       ' + c.cyan + 'omi setup --install-deps' + c.reset);
+    }
+  } else if (!omx.installed && !installDeps) {
+    console.log('\n  ' + c.dim + 'Tip: run `omi setup --install-deps` to auto-install OMX for full Think/Do routing.' + c.reset);
   }
 
   // Initialize .omi/ directory
@@ -438,10 +508,11 @@ function cmdRoute() {
 // ---------------------------------------------------------------------------
 
 const command = process.argv[2];
+const rest = process.argv.slice(3);
 
 switch (command) {
   case 'setup':
-    cmdSetup();
+    cmdSetup({ installDeps: rest.includes('--install-deps') || rest.includes('--auto') });
     break;
   case 'doctor':
     cmdDoctor();
