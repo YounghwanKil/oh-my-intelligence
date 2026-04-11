@@ -37,6 +37,16 @@ export function readJsonSafe(filePath) {
   }
 }
 
+export function readTextSafe(filePath) {
+  try {
+    if (!existsSync(filePath)) return undefined;
+    const value = readFileSync(filePath, 'utf-8').trim();
+    return value || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * Compare two semver strings. Returns -1, 0, or 1.
  */
@@ -57,6 +67,11 @@ export function detectOmc(root) {
   if (!root) root = findProjectRoot();
   const omcDir = join(root, '.omc');
   if (!existsSync(omcDir)) return { installed: false };
+
+  const localVersion = readTextSafe(join(omcDir, 'version'));
+  if (localVersion) {
+    return { installed: true, version: localVersion, path: omcDir };
+  }
 
   // Try to find OMC version from known paths
   const candidates = [
@@ -86,6 +101,11 @@ export function detectOmx(root) {
   if (!root) root = findProjectRoot();
   const omxDir = join(root, '.omx');
   if (!existsSync(omxDir)) return { installed: false };
+
+  const localVersion = readTextSafe(join(omxDir, 'version'));
+  if (localVersion) {
+    return { installed: true, version: localVersion, path: omxDir };
+  }
 
   const candidates = [
     join(root, 'node_modules', 'oh-my-codex', 'package.json'),

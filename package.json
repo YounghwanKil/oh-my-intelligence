@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "Think/Do multi-model orchestration for Claude Code — combines OMC (Claude) + OMX (Codex) strengths",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "omi": "bridge/cli.cjs"
   },
   "files": [
+    ".mcp.json",
+    "dist",
     "src",
     "agents",
     "bridge",
@@ -20,11 +23,21 @@
     "README.md",
     "LICENSE"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YounghwanKil/oh-my-intelligence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YounghwanKil/oh-my-intelligence/issues"
+  },
+  "homepage": "https://github.com/YounghwanKil/oh-my-intelligence#readme",
+  "author": "Younghwan Kil <yhgil99@kaist.ac.kr>",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest",
-    "check-vendored-types": "bash scripts/check-vendored-types.sh"
+    "check-vendored-types": "bash scripts/check-vendored-types.sh",
+    "prepublishOnly": "npm run build && npx vitest run"
   },
   "keywords": [
     "claude-code",

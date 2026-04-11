@@ -53,6 +53,16 @@ function readJsonSafe(filePath) {
   }
 }
 
+function readTextSafe(filePath) {
+  try {
+    if (!fs.existsSync(filePath)) return undefined;
+    const value = fs.readFileSync(filePath, 'utf-8').trim();
+    return value || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 function compareVersions(a, b) {
   const pa = a.split('.').map(Number);
   const pb = b.split('.').map(Number);
@@ -73,6 +83,26 @@ function label(text, color) {
   return (color || '') + text + c.reset;
 }
 
+function writeJson(filePath, data) {
+  const dir = path.dirname(filePath);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
+}
+
+function writeWarningsState(omiBase, warnings, errors) {
+  const warningsFile = path.join(omiBase, 'state', 'providers', 'version-warning.json');
+  if (warnings.length > 0 || errors.length > 0) {
+    writeJson(warningsFile, { warnings, errors, _schemaVersion: '1.0' });
+    return;
+  }
+
+  try {
+    fs.unlinkSync(warningsFile);
+  } catch (error) {
+    if (error && error.code !== 'ENOENT') throw error;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Provider detection
 // ---------------------------------------------------------------------------
@@ -80,6 +110,11 @@ function label(text, color) {
 function detectOmc(root) {
   const omcDir = path.join(root, '.omc');
   if (!fs.existsSync(omcDir)) return { installed: false };
+
+  const localVersion = readTextSafe(path.join(omcDir, 'version'));
+  if (localVersion) {
+    return { installed: true, version: localVersion, path: omcDir };
+  }
 
   const candidates = [
     path.join(root, 'node_modules', 'oh-my-claude-sisyphus', 'package.json'),
@@ -103,6 +138,11 @@ function detectOmc(root) {
 function detectOmx(root) {
   const omxDir = path.join(root, '.omx');
   if (!fs.existsSync(omxDir)) return { installed: false };
+
+  const localVersion = readTextSafe(path.join(omxDir, 'version'));
+  if (localVersion) {
+    return { installed: true, version: localVersion, path: omxDir };
+  }
 
   const candidates = [
     path.join(root, 'node_modules', 'oh-my-codex', 'package.json'),
@@ -163,6 +203,8 @@ function cmdHelp() {
 
 function cmdSetup() {
   const root = findProjectRoot();
+  const MIN_OMC_VERSION = '4.10.0';
+  const MIN_OMX_VERSION = '0.11.0';
   console.log('\n  ' + c.bold + c.cyan + 'OMI Setup' + c.reset);
   console.log('  ' + c.dim + '─────────' + c.reset + '\n');
 
@@ -220,9 +262,22 @@ function cmdSetup() {
   }
 
   const providersFile = path.join(omiBase, 'state', 'providers', 'detected.json');
-  const providersDir = path.dirname(providersFile);
-  if (!fs.existsSync(providersDir)) fs.mkdirSync(providersDir, { recursive: true });
-  fs.writeFileSync(providersFile, JSON.stringify({ providers, _schemaVersion: '1.0' }, null, 2) + '\n');
+  writeJson(providersFile, { providers, _schemaVersion: '1.0' });
+
+  const warnings = [];
+  const errors = [];
+  if (!omc.installed) {
+    errors.push('OMC (oh-my-claudecode) not detected. OMI requires OMC to function.');
+  } else if (omc.version && compareVersions(omc.version, MIN_OMC_VERSION) < 0) {
+    warnings.push(`OMC version ${omc.version} is below minimum ${MIN_OMC_VERSION}. Some features may not work correctly.`);
+  }
+  if (!omx.installed) {
+    warnings.push('OMX (oh-my-codex) not detected. Do Lane will use Claude fallback.');
+  } else if (omx.version && compareVersions(omx.version, MIN_OMX_VERSION) < 0) {
+    warnings.push(`OMX version ${omx.version} is below minimum ${MIN_OMX_VERSION}. Codex features may not work correctly.`);
+  }
+
+  writeWarningsState(omiBase, warnings, errors);
 
   console.log('\n' + icon(true) + ' OMI setup complete.\n');
 
@@ -292,10 +347,20 @@ function cmdDoctor() {
     console.log(icon(false) + ' v' + nodeVersion + ' (minimum: v20)');
   }
 
+  const omcVersionOk = !omc.version || compareVersions(omc.version, MIN_OMC_VERSION) >= 0;
+  const omxVersionOk = !omx.version || compareVersions(omx.version, MIN_OMX_VERSION) >= 0;
+  const nodeHealthy = nodeMajor >= 20;
+
   // Summary
   console.log('');
-  if (!omc.installed) {
+  if (!nodeHealthy) {
+    console.log(c.bold + '  RESULT: ' + c.reset + icon(false) + ' Environment needs attention before reliable routing');
+  } else if (!omc.installed) {
     console.log(c.bold + '  RESULT: ' + c.reset + icon(false) + ' OMC is required. Install with: ' + c.cyan + 'claude plugin install oh-my-claudecode' + c.reset);
+  } else if (!omcVersionOk) {
+    console.log(c.bold + '  RESULT: ' + c.reset + icon(false) + ' Environment needs attention before reliable routing');
+  } else if (omx.installed && !omxVersionOk) {
+    console.log(c.bold + '  RESULT: ' + c.reset + icon(false) + ' Codex support is degraded until OMX is updated');
   } else if (omx.installed) {
     console.log(c.bold + '  RESULT: ' + c.reset + icon(true) + ' Full Think/Do routing ' + c.dim + '(Claude + Codex)' + c.reset);
   } else {
@@ -358,10 +423,11 @@ function cmdRoute() {
 
   // Version warnings
   const warnings = readJsonSafe(path.join(stateDir, 'providers', 'version-warning.json'));
-  if (warnings && warnings.warnings && warnings.warnings.length > 0) {
+  const warningList = warnings?.warnings ?? (warnings?.warning ? [warnings.warning] : []);
+  if (warningList.length > 0) {
     console.log('');
     console.log('Warnings:');
-    for (const w of warnings.warnings) {
+    for (const w of warningList) {
       console.log('  - ' + w);
     }
   }

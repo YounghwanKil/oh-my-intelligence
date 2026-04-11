@@ -336,7 +336,7 @@ git clone https://github.com/YounghwanKil/oh-my-intelligence
 cd oh-my-intelligence
 npm install
 npm run build
-npm test                        # 68 tests
+npm test                        # 74 tests
 npm run check-vendored-types    # CI: verify schema compatibility
 ```
 

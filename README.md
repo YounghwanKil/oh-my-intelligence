@@ -45,19 +45,27 @@ Claude Code and Codex CLI each have clear strengths. Benchmarks confirm it:
 
 Choose one of the two methods below.
 
-#### Option A: npm (recommended)
+#### Option A: install from source (recommended for now)
 
 ```bash
-npm i -g oh-my-intelligence
+git clone https://github.com/YounghwanKil/oh-my-intelligence.git
+cd oh-my-intelligence
+npm i -g .
 ```
 
-Then inside Claude Code:
+Then initialize OMI once in your project root:
+
+```bash
+omi setup
+```
+
+After that, open Claude Code in the same project. OMI will keep `.omi/` state updated automatically via its hooks.
+
+Inside Claude Code you can verify routing with:
 
 ```
-/setup
+/route
 ```
-
-This detects OMC/OMX, initializes `.omi/` state, and configures hooks.
 
 #### Option B: Claude Code Marketplace
 
@@ -69,11 +77,7 @@ Inside Claude Code:
 /reload-plugins
 ```
 
-After reload, run setup:
-
-```
-/setup
-```
+After reload, start or restart the Claude Code session in your project. OMI will auto-detect OMC/OMX and initialize `.omi/` on session start. Use `/route` to confirm the detected providers and active lane.
 
 ### Build something
 
@@ -95,9 +99,11 @@ This shows the current routing status, detected providers, and active lanes.
 
 ### Updating
 
-**npm:**
+**Source install:**
 ```bash
-npm i -g oh-my-intelligence@latest
+cd oh-my-intelligence
+git pull
+npm i -g .
 ```
 
 **Marketplace:**
@@ -188,9 +194,9 @@ Composite workflows auto-switch per phase:
 
 All existing OMC skills (`/oh-my-claudecode:*`) continue to work unchanged.
 
-### CLI (npm install only)
+### CLI (source install only)
 
-If you installed via npm (`npm i -g oh-my-intelligence`), these terminal commands are also available:
+If you installed from source with npm (`npm i -g .` inside the cloned repo), these terminal commands are also available:
 
 ```bash
 omi setup     # Detect OMC/OMX, initialize .omi/
@@ -199,7 +205,7 @@ omi route     # Show providers and routing state
 omi version   # Show version
 ```
 
-> **Note:** Marketplace installs use `/setup` and `/route` inside Claude Code instead.
+> **Note:** Marketplace installs initialize on session start inside Claude Code. Use `/route` there to verify the current routing status.
 
 ---
 
@@ -336,7 +342,7 @@ git clone https://github.com/YounghwanKil/oh-my-intelligence
 cd oh-my-intelligence
 npm install
 npm run build
-npm test                        # 68 tests
+npm test                        # 74 tests
 npm run check-vendored-types    # CI: verify schema compatibility
 ```
 

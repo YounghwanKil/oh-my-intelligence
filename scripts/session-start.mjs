@@ -6,7 +6,7 @@
  *
  * Runs on SessionStart event. Detects providers, initializes .omi/ state.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync, unlinkSync } from 'fs';
 import { join, dirname } from 'path';
 
 const SCHEMA_VERSION = '1.0';
@@ -37,6 +37,14 @@ function readJsonSafe(filePath) {
   } catch { return null; }
 }
 
+function readTextSafe(filePath) {
+  try {
+    if (!existsSync(filePath)) return undefined;
+    const value = readFileSync(filePath, 'utf-8').trim();
+    return value || undefined;
+  } catch { return undefined; }
+}
+
 function compareVersions(a, b) {
   const pa = a.split('.').map(Number);
   const pb = b.split('.').map(Number);
@@ -50,6 +58,11 @@ function compareVersions(a, b) {
 function detectOmc(root) {
   const omcDir = join(root, '.omc');
   if (!existsSync(omcDir)) return { installed: false };
+
+  const localVersion = readTextSafe(join(omcDir, 'version'));
+  if (localVersion) {
+    return { installed: true, version: localVersion, path: omcDir };
+  }
 
   // Try to read OMC package.json from plugin
   const pluginPaths = [
@@ -69,6 +82,11 @@ function detectOmc(root) {
 function detectOmx(root) {
   const omxDir = join(root, '.omx');
   if (!existsSync(omxDir)) return { installed: false };
+
+  const localVersion = readTextSafe(join(omxDir, 'version'));
+  if (localVersion) {
+    return { installed: true, version: localVersion, path: omxDir };
+  }
 
   const pluginPaths = [
     join(root, 'node_modules', 'oh-my-codex', 'package.json'),
@@ -141,47 +159,33 @@ export default function sessionStart() {
   const providers = [];
   const warnings = [];
 
-  // Claude Code CLI
   providers.push({
-    name: 'claude-code',
-    status: claudeCli.installed ? 'available' : 'missing',
+    name: 'claude',
+    status: omc.installed && claudeCli.installed ? 'available' : 'unavailable',
+    version: omc.version || undefined,
+    minVersion: MIN_OMC_VERSION,
+    cliInstalled: claudeCli.installed,
+    plugin: 'oh-my-claudecode',
   });
 
-  // Codex CLI
-  providers.push({
-    name: 'codex-cli',
-    status: codexCli.installed ? 'available' : 'missing',
-  });
-
-  // OMC (oh-my-claudecode)
-  if (omc.installed) {
-    providers.push({
-      name: 'omc',
-      status: 'available',
-      version: omc.version || 'unknown',
-      minVersion: MIN_OMC_VERSION,
-    });
-    if (omc.version && compareVersions(omc.version, MIN_OMC_VERSION) < 0) {
-      warnings.push(`OMC version ${omc.version} is below minimum ${MIN_OMC_VERSION}. Some features may not work correctly.`);
-    }
-  } else {
-    providers.push({ name: 'omc', status: 'missing' });
+  if (omc.installed && omc.version && compareVersions(omc.version, MIN_OMC_VERSION) < 0) {
+    warnings.push(`OMC version ${omc.version} is below minimum ${MIN_OMC_VERSION}. Some features may not work correctly.`);
+  } else if (!omc.installed) {
     errors.push('OMC (oh-my-claudecode) not detected. OMI requires OMC to function.');
   }
 
-  // OMX (oh-my-codex)
-  if (omx.installed) {
-    providers.push({
-      name: 'omx',
-      status: 'available',
-      version: omx.version || 'unknown',
-      minVersion: MIN_OMX_VERSION,
-    });
-    if (omx.version && compareVersions(omx.version, MIN_OMX_VERSION) < 0) {
-      warnings.push(`OMX version ${omx.version} is below minimum ${MIN_OMX_VERSION}. Codex features may not work correctly.`);
-    }
-  } else {
-    providers.push({ name: 'omx', status: 'missing' });
+  providers.push({
+    name: 'codex',
+    status: omx.installed && codexCli.installed ? 'available' : 'unavailable',
+    version: omx.version || undefined,
+    minVersion: MIN_OMX_VERSION,
+    cliInstalled: codexCli.installed,
+    plugin: 'oh-my-codex',
+  });
+
+  if (omx.installed && omx.version && compareVersions(omx.version, MIN_OMX_VERSION) < 0) {
+    warnings.push(`OMX version ${omx.version} is below minimum ${MIN_OMX_VERSION}. Codex features may not work correctly.`);
+  } else if (!omx.installed) {
     warnings.push('OMX (oh-my-codex) not detected. Do Lane will use Claude fallback.');
   }
 
@@ -191,6 +195,12 @@ export default function sessionStart() {
   // Write warnings/errors
   if (warnings.length > 0 || errors.length > 0) {
     atomicWriteJson(join(omiState, 'providers', 'version-warning.json'), { warnings, errors });
+  } else {
+    try {
+      unlinkSync(join(omiState, 'providers', 'version-warning.json'));
+    } catch (error) {
+      if (error?.code !== 'ENOENT') throw error;
+    }
   }
 
   // Read OMC session state if available (ADR-001a: downstream consumer)
