@@ -272,19 +272,19 @@ C'est voulu ainsi. Codex est un accélérateur, jamais une exigence.
 
 ```
 ┌──────────────────────────────────────────┐
-│              OMI Plugin                   │
-│  ┌────────┐ ┌─────────┐ ┌────────────┐  │
-│  │ Router │ │  State   │ │   Interop  │  │
-│  │Think/Do│ │  .omi/   │ │ OMC Bridge │  │
-│  └───┬────┘ └────┬────┘ │ OMX Bridge │  │
-│      │           │      └─────┬──────┘  │
+│                OMI Plugin                │
+│  ┌────────┐ ┌─────────┐ ┌────────────┐   │
+│  │ Router │ │  State  │ │  Interop   │   │
+│  │Think/Do│ │  .omi/  │ │ OMC Bridge │   │
+│  └───┬────┘ └────┬────┘ │ OMX Bridge │   │
+│      │           │      └─────┬──────┘   │
 └──────┼───────────┼────────────┼──────────┘
        │           │            │
-  ┌────▼────┐ ┌────▼────┐ ┌────▼────┐
-  │   OMC   │ │  .omi/  │ │   OMX   │
-  │ (Claude)│ │  state  │ │ (Codex) │
-  │ Required│ │  files  │ │Optional │
-  └─────────┘ └─────────┘ └─────────┘
+  ┌────▼────┐ ┌────▼────┐  ┌────▼────┐
+  │   OMC   │ │  .omi/  │  │   OMX   │
+  │ (Claude)│ │  state  │  │ (Codex) │
+  │Required │ │  files  │  │Optional │
+  └─────────┘ └─────────┘  └─────────┘
 ```
 
 ### Décisions de conception clés

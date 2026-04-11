@@ -272,19 +272,19 @@ Tách biệt với `scientist` (phân tích dữ liệu tổng quát). Tác vụ
 
 ```
 ┌──────────────────────────────────────────┐
-│              OMI Plugin                   │
-│  ┌────────┐ ┌─────────┐ ┌────────────┐  │
-│  │ Router │ │  State   │ │   Interop  │  │
-│  │Think/Do│ │  .omi/   │ │ OMC Bridge │  │
-│  └───┬────┘ └────┬────┘ │ OMX Bridge │  │
-│      │           │      └─────┬──────┘  │
+│                OMI Plugin                │
+│  ┌────────┐ ┌─────────┐ ┌────────────┐   │
+│  │ Router │ │  State  │ │  Interop   │   │
+│  │Think/Do│ │  .omi/  │ │ OMC Bridge │   │
+│  └───┬────┘ └────┬────┘ │ OMX Bridge │   │
+│      │           │      └─────┬──────┘   │
 └──────┼───────────┼────────────┼──────────┘
        │           │            │
-  ┌────▼────┐ ┌────▼────┐ ┌────▼────┐
-  │   OMC   │ │  .omi/  │ │   OMX   │
-  │ (Claude)│ │  state  │ │ (Codex) │
-  │ Required│ │  files  │ │Optional │
-  └─────────┘ └─────────┘ └─────────┘
+  ┌────▼────┐ ┌────▼────┐  ┌────▼────┐
+  │   OMC   │ │  .omi/  │  │   OMX   │
+  │ (Claude)│ │  state  │  │ (Codex) │
+  │Required │ │  files  │  │Optional │
+  └─────────┘ └─────────┘  └─────────┘
 ```
 
 ### Quyết định thiết kế quan trọng
