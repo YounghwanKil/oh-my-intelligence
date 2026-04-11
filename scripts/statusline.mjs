@@ -11,8 +11,10 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
+import { homedir } from 'os';
+import { spawnSync } from 'child_process';
 
-const VERSION = '1.0.2';
+const VERSION = '1.0.3';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -176,10 +178,34 @@ function getModelDisplay(stdin) {
   return name ? `${DIM}${name}${RESET}` : null;
 }
 
+// ── OMC chaining ─────────────────────────────────────────────────────────────
+
+function chainOmcHud(stdinRaw) {
+  if (process.env.OMI_NO_CHAIN === '1') return '';
+  const omcHud = join(homedir(), '.claude', 'hud', 'omc-hud.mjs');
+  if (!existsSync(omcHud)) return '';
+  try {
+    const result = spawnSync('node', [omcHud], {
+      input: stdinRaw,
+      encoding: 'utf-8',
+      timeout: 2500,
+      stdio: ['pipe', 'pipe', 'ignore'],
+    });
+    if (result.status !== 0) return '';
+    return (result.stdout || '').replace(/\s+$/, '');
+  } catch {
+    return '';
+  }
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 function main() {
-  const stdin = readStdin();
+  let stdinRaw = '';
+  try { stdinRaw = readFileSync(0, 'utf-8'); } catch { stdinRaw = ''; }
+  let stdin = {};
+  try { stdin = stdinRaw ? JSON.parse(stdinRaw) : {}; } catch { stdin = {}; }
+
   const root = findProjectRoot();
 
   // Build status line parts
@@ -209,8 +235,12 @@ function main() {
   const model = getModelDisplay(stdin);
   if (model) parts.push(model);
 
-  // Join with dim separator
-  const line = parts.join(` ${DIM}|${RESET} `);
+  const omiLine = parts.join(` ${DIM}|${RESET} `);
+
+  // 7. Append OMC HUD output (if OMC is installed) so both plugins coexist.
+  const omcLine = chainOmcHud(stdinRaw);
+
+  const line = omcLine ? `${omiLine} ${DIM}•${RESET} ${omcLine}` : omiLine;
   process.stdout.write(line);
 }
 

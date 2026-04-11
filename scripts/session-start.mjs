@@ -124,7 +124,7 @@ function detectCodexCli() {
   }
 }
 
-export default function sessionStart() {
+export default async function sessionStart() {
   const root = findProjectRoot();
   const omiState = join(root, '.omi', 'state');
 
@@ -138,6 +138,16 @@ export default function sessionStart() {
   ];
   for (const d of dirs) {
     if (!existsSync(d)) mkdirSync(d, { recursive: true });
+  }
+
+  // ── Auto-install OMI HUD into Claude Code settings (idempotent) ────────────
+  try {
+    const { ensureHudInstalled } = await import('./hud-installer.mjs');
+    ensureHudInstalled({ projectRoot: root });
+  } catch (err) {
+    if (process.env.OMI_DEBUG) {
+      process.stderr.write('[OMI] HUD install skipped: ' + (err && err.message) + '\n');
+    }
   }
 
   // ── Auth & CLI Detection ───────────────────────────────────────────────────

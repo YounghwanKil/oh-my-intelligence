@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const VERSION = '1.0.2';
+const VERSION = '1.0.3';
 
 const OMC_NPM_PACKAGE = 'oh-my-claude-sisyphus';
 const OMX_NPM_PACKAGE = 'oh-my-codex';
@@ -145,6 +145,28 @@ function runPluginSetup(binName, displayName, cwd) {
   return ok;
 }
 
+function hudInstallerPath() {
+  return path.resolve(__dirname, '..', 'scripts', 'hud-installer.mjs');
+}
+
+function runHudInstaller(mode, projectRoot) {
+  const installer = hudInstallerPath();
+  if (!fs.existsSync(installer)) {
+    return { ok: false, note: 'installer script missing at ' + installer };
+  }
+  const args = [installer, '--project-root', projectRoot];
+  if (mode === 'disable') args.push('--disable');
+  const result = spawnSync('node', args, { encoding: 'utf-8' });
+  if (result.status !== 0) {
+    return { ok: false, note: (result.stderr || '').trim() || 'installer exited non-zero' };
+  }
+  try {
+    return { ok: true, result: JSON.parse((result.stdout || '').trim()) };
+  } catch {
+    return { ok: true, result: {} };
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Provider detection
 // ---------------------------------------------------------------------------
@@ -233,6 +255,7 @@ function cmdHelp() {
     '              ' + c.dim + '--install-deps  auto-install OMC and OMX if missing' + c.reset,
     '    ' + c.green + 'doctor' + c.reset + '    Check all dependencies and report status',
     '    ' + c.green + 'route' + c.reset + '     Show current routing status',
+    '    ' + c.green + 'hud' + c.reset + '       Enable OMI status line (add `disable` to restore)',
     '    ' + c.green + 'version' + c.reset + '   Show OMI version',
     '    ' + c.green + 'help' + c.reset + '      Show this help message',
     '',
@@ -349,12 +372,60 @@ function cmdSetup(opts) {
 
   writeWarningsState(omiBase, warnings, errors);
 
+  // ── HUD auto-install ─────────────────────────────────────────────────────
+  console.log('\nStatus line:');
+  const hud = runHudInstaller('enable', root);
+  if (hud.ok) {
+    const note = hud.result && hud.result.note;
+    if (note === 'already active') {
+      console.log('  ' + icon(true) + ' OMI HUD already active in ~/.claude/settings.json');
+    } else if (note === 'new') {
+      console.log('  ' + icon(true) + ' OMI HUD installed to ~/.claude/hud/omi-hud.mjs');
+      console.log('  ' + c.dim + 'Restart Claude Code to see it on the status line.' + c.reset);
+    } else if (note === 'replaced previous') {
+      console.log('  ' + icon(true) + ' OMI HUD installed (previous status line backed up to .omi/state/hud-backup.json)');
+      console.log('  ' + c.dim + 'Restart Claude Code to see it. Use `omi hud disable` to restore.' + c.reset);
+    } else {
+      console.log('  ' + icon(true) + ' OMI HUD wired. ' + (note || ''));
+    }
+  } else {
+    console.log('  ' + icon(false) + ' HUD install failed: ' + (hud.note || 'unknown'));
+  }
+
   console.log('\n' + icon(true) + ' OMI setup complete.\n');
 
   if (omx.installed) {
     console.log('Mode: Claude + Codex (full Think/Do routing)');
   } else {
     console.log('Mode: Claude-only (Codex fallback active for Do tasks)');
+  }
+}
+
+function cmdHud(sub) {
+  const root = findProjectRoot();
+  if (sub === 'disable' || sub === 'off') {
+    const result = runHudInstaller('disable', root);
+    if (result.ok) {
+      console.log(icon(true) + ' OMI HUD disabled. ' + c.dim + (result.result && result.result.note || '') + c.reset);
+    } else {
+      console.log(icon(false) + ' Failed to disable: ' + result.note);
+    }
+    return;
+  }
+  // Default: enable
+  const result = runHudInstaller('enable', root);
+  if (result.ok) {
+    const note = result.result && result.result.note;
+    if (note === 'already active') {
+      console.log(icon(true) + ' OMI HUD already active');
+    } else {
+      console.log(icon(true) + ' OMI HUD enabled. Restart Claude Code to see it.');
+      if (note === 'replaced previous') {
+        console.log('  ' + c.dim + 'Previous status line saved to .omi/state/hud-backup.json' + c.reset);
+      }
+    }
+  } else {
+    console.log(icon(false) + ' Failed to enable: ' + result.note);
   }
 }
 
@@ -519,6 +590,9 @@ switch (command) {
     break;
   case 'route':
     cmdRoute();
+    break;
+  case 'hud':
+    cmdHud(rest[0]);
     break;
   case 'version':
   case '--version':
