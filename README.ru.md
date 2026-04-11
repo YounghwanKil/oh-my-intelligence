@@ -193,7 +193,8 @@ npm i -g oh-my-intelligence@latest
 Если вы установили через npm (`npm i -g oh-my-intelligence`), также доступны эти команды терминала:
 
 ```bash
-omi setup     # Обнаружить OMC/OMX, инициализировать .omi/
+omi setup                 # Обнаружить OMC/OMX, инициализировать .omi/
+omi setup --install-deps  # Установить OMC + OMX глобально, затем setup
 omi doctor    # Проверить зависимости и состояние
 omi route     # Показать провайдеров и состояние маршрутизации
 omi version   # Показать версию

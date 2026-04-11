@@ -62,6 +62,10 @@ omi setup --install-deps     # auto-install OMC + OMX if missing, then setup
 
 `--install-deps` runs `npm i -g oh-my-claude-sisyphus oh-my-codex` and their respective `setup` commands for you. Omit the flag to keep the default safe behavior (detection only).
 
+> **Caveats for `--install-deps`**
+> - The global `npm i -g` step needs write access to your npm prefix. If it fails with `EACCES`, either re-run with `sudo`, or configure a user-writable prefix (`npm config set prefix ~/.npm-global`).
+> - The follow-up `omc setup` / `omx setup` commands expect to run inside a Claude Code project. OMI still completes its own initialization even if a plugin's `setup` fails, so you can always rerun those manually later.
+
 After that, open Claude Code in the same project. OMI will keep `.omi/` state updated automatically via its hooks.
 
 Inside Claude Code you can verify routing with:

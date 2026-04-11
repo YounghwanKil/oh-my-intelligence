@@ -193,7 +193,8 @@ Tất cả các skill OMC hiện có (`/oh-my-claudecode:*`) vẫn hoạt độn
 Nếu bạn cài đặt qua npm (`npm i -g oh-my-intelligence`), các lệnh terminal sau cũng khả dụng:
 
 ```bash
-omi setup     # Phát hiện OMC/OMX, khởi tạo .omi/
+omi setup                 # Phát hiện OMC/OMX, khởi tạo .omi/
+omi setup --install-deps  # Cài OMC + OMX toàn cục, rồi setup
 omi doctor    # Kiểm tra phụ thuộc và trạng thái
 omi route     # Hiển thị nhà cung cấp và trạng thái định tuyến
 omi version   # Hiển thị phiên bản

@@ -62,6 +62,10 @@ omi setup --install-deps     # OMC + OMX 자동 설치 후 setup까지 실행
 
 `--install-deps`는 `npm i -g oh-my-claude-sisyphus oh-my-codex`와 각 플러그인의 `setup`을 자동으로 돌려줍니다. 안전하게 감지만 하려면 플래그를 빼고 실행하세요.
 
+> **`--install-deps` 주의사항**
+> - 전역 `npm i -g`는 npm prefix에 쓰기 권한이 필요합니다. `EACCES`가 뜨면 `sudo`로 재실행하거나 사용자 홈에 prefix를 잡아두세요 (`npm config set prefix ~/.npm-global`).
+> - 후속 `omc setup` / `omx setup`은 Claude Code 프로젝트 안에서 실행된다고 가정합니다. 플러그인 setup이 실패해도 OMI 자체 초기화는 그대로 끝나므로, 실패한 단계는 나중에 수동으로 다시 돌릴 수 있습니다.
+
 그 후 같은 프로젝트를 Claude Code로 열면 OMI가 훅을 통해 `.omi/` 상태를 계속 갱신합니다.
 
 Claude Code 안에서는 아래 명령으로 라우팅 상태를 확인할 수 있습니다:
@@ -202,7 +206,8 @@ npm i -g .
 소스에서 npm으로 설치한 경우(클론한 저장소 안에서 `npm i -g .`) 터미널에서 다음 명령어도 사용할 수 있습니다:
 
 ```bash
-omi setup     # OMC/OMX 감지, .omi/ 초기화
+omi setup                 # OMC/OMX 감지, .omi/ 초기화
+omi setup --install-deps  # OMC + OMX 전역 설치 후 setup 자동 실행
 omi doctor    # 의존성 및 상태 확인
 omi route     # 프로바이더 및 라우팅 상태 표시
 omi version   # 버전 표시

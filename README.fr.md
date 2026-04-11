@@ -193,7 +193,8 @@ Toutes les compétences OMC existantes (`/oh-my-claudecode:*`) continuent de fon
 Si vous avez installé via npm (`npm i -g oh-my-intelligence`), ces commandes terminal sont également disponibles :
 
 ```bash
-omi setup     # Détecter OMC/OMX, initialiser .omi/
+omi setup                 # Détecter OMC/OMX, initialiser .omi/
+omi setup --install-deps  # Installer OMC + OMX globalement, puis setup
 omi doctor    # Vérifier les dépendances et l'état
 omi route     # Afficher les fournisseurs et l'état du routage
 omi version   # Afficher la version
